@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="./src/jspsych.js"></script>
+    <script src="./src/plugin-html-keyboard-response.js"></script>
+    <script src="./src/plugin-html-button-response.js"></script>
+    <script src="./src/plugin-html-slider-response.js"></script>
+    <script src="./src/stimuli.js"></script>
+    <link rel="stylesheet" href="./src/jspsych.css">
+    <style>
+      img {
+        width: 300px;
+      }
+    </style>
+  </head>
+  <body></body>
+  <script>
+
+    const jsPsych = initJsPsych({
+      default_iti: 250, 
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
+
+    // initialize trial counter
+    let trialCount = 0;
+    
+
+    /*
+    TRIALS
+    */
+
+    const fixation = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: '<div style="font-size:60px;">+</div>',
+      choices: "NO_KEYS",
+      trial_duration: 1000,
+      data: { screen: "fixation" }
+    };
+
+    const trialMain = {
+      type: jsPsychHtmlSliderResponse,
+      stimulus: () => 
+        `<div style="font-size:40px;">${jsPsych.timelineVariable('word')}</div>`,
+      labels: ['0', '1', '2', '3', '4'],
+      slider_width: 500,
+      require_movement: false,
+      prompt: '<p>Is this color closer to purple or blue? Use the slider above.</p>',
+      on_finish: () => ++trialCount,
+      data: { screen: "trial", word: jsPsych.timelineVariable('word') }
+    };
+
+    const breakTrial = {
+      type: jsPsychHtmlButtonResponse,
+      stimulus:  "<p style='font-size: 25px'>Time to take a break!</p>" + 
+              "<p style='font-size: 25px'>Take a rest for about a minute. Then, Continue by pressing the button</p>",
+      choices: ["Continue"],
+      data: { screen: "break" }
+    };
+
+
+    /*
+    TIMELINES
+    */
+
+    // continue to break trial if trialCount is an even nr, else skip to next trial
+    const breakConditional = {
+      timeline: [breakTrial],
+      conditional_function: () => ((trialCount % 2 == 0) && (trialCount > 1)) ? true : false
+    };
+
+    // main procedure, stimuli defined in stimuli.js
+    const procedure = {
+      timeline: [breakConditional, fixation, trialMain],
+      timeline_variables: wordList, 
+      randomize_order: true
+    };
+
+
+    jsPsych.run([procedure]);
+
+  </script>
+</html>
