@@ -58,7 +58,7 @@ var jsPsychHtmlSliderResponse = (function (jspsych) {
           idkbtn_label: {
               type: jspsych.ParameterType.STRING,
               pretty_name: "2nd button label",
-              default: "I don't know",
+              default: "I don't know the word well enough",
               array: false,
           },
           /** If true, the participant will have to move the slider before continuing. */
@@ -205,6 +205,8 @@ var jsPsychHtmlSliderResponse = (function (jspsych) {
               // next trial
               this.jsPsych.finishTrial(trialdata);
           };
+
+          // RESPONSE BTN - EVENT LISTENER
           display_element
               .querySelector("#jspsych-html-slider-response-next")
               .addEventListener("click", () => {
@@ -219,6 +221,24 @@ var jsPsychHtmlSliderResponse = (function (jspsych) {
                   display_element.querySelector("#jspsych-html-slider-response-next").disabled = true;
               }
           });
+
+          // IDK BTN - EVENT LISTENER
+          display_element
+              .querySelector("#button-idk")
+              .addEventListener("click", () => {
+              // measure response time
+              var endTime = performance.now();
+              response.rt = Math.round(endTime - startTime);
+              response.response = "idk";
+              console.log(trial.response_ends_trial);
+              if (trial.response_ends_trial) {
+                  end_trial();
+              }
+              else {    // what does this do?
+                  display_element.querySelector("#jspsych-html-slider-response-next").disabled = true;
+              }
+          });
+
           if (trial.stimulus_duration !== null) {
               this.jsPsych.pluginAPI.setTimeout(() => {
                   display_element.querySelector("#jspsych-html-slider-response-stimulus").style.visibility = "hidden";
