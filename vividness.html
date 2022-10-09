@@ -48,7 +48,12 @@
       require_movement: false,
       prompt: '<p>Is this color closer to purple or blue? Use the slider above.</p>',
       on_finish: () => ++trialCount,
-      data: { screen: "trial", word: jsPsych.timelineVariable('word') }
+      
+      // save all relevant trial data
+      data: { screen: "trial", 
+        word: jsPsych.timelineVariable('word'), 
+        category: jsPsych.timelineVariable('category')
+      }
     };
 
     const breakTrial = {

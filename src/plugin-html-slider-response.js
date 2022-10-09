@@ -20,13 +20,13 @@ var jsPsychHtmlSliderResponse = (function (jspsych) {
           max: {
               type: jspsych.ParameterType.INT,
               pretty_name: "Max slider",
-              default: 100,
+              default: 4,
           },
           /** Sets the starting value of the slider */
           slider_start: {
               type: jspsych.ParameterType.INT,
               pretty_name: "Slider starting value",
-              default: 50,
+              default: 2,
           },
           /** Sets the step of the slider */
           step: {
@@ -52,6 +52,13 @@ var jsPsychHtmlSliderResponse = (function (jspsych) {
               type: jspsych.ParameterType.STRING,
               pretty_name: "Button label",
               default: "Continue",
+              array: false,
+          },
+          /** Label of the non-response button. */
+          idkbtn_label: {
+              type: jspsych.ParameterType.STRING,
+              pretty_name: "2nd button label",
+              default: "I don't know",
               array: false,
           },
           /** If true, the participant will have to move the slider before continuing. */
@@ -155,11 +162,22 @@ var jsPsychHtmlSliderResponse = (function (jspsych) {
                   ">" +
                   trial.button_label +
                   "</button>";
-          display_element.innerHTML = html;
+        //   display_element.innerHTML = html;
+          // add second button
+          html +=
+              '<button id="button-idk" class="jspsych-btn" ' +
+                  (trial.require_movement ? "disabled" : "") +
+                  ">" +
+                  trial.idkbtn_label +
+                  "</button>";
+                  
+          display_element.innerHTML = html;  
+          
           var response = {
-              rt: null,
-              response: null,
+            rt: null,
+            response: null,
           };
+
           if (trial.require_movement) {
               const enable_button = () => {
                   display_element.querySelector("#jspsych-html-slider-response-next").disabled = false;

@@ -1,4 +1,4 @@
-var wordList = [
+const wordList = [
     {
       "word": "radio",
       "category": "hShE"
