@@ -26,7 +26,7 @@ var jsPsychHtmlSliderResponse = (function (jspsych) {
           slider_start: {
               type: jspsych.ParameterType.INT,
               pretty_name: "Slider starting value",
-              default: 2,
+              default: 0,
           },
           /** Sets the step of the slider */
           step: {
@@ -166,7 +166,7 @@ var jsPsychHtmlSliderResponse = (function (jspsych) {
           // add second button
           html +=
               '<button id="button-idk" class="jspsych-btn" ' +
-                  (trial.require_movement ? "disabled" : "") +
+                //   (trial.require_movement ? "disabled" : "") +
                   ">" +
                   trial.idkbtn_label +
                   "</button>";
@@ -234,8 +234,8 @@ var jsPsychHtmlSliderResponse = (function (jspsych) {
               if (trial.response_ends_trial) {
                   end_trial();
               }
-              else {    // what does this do?
-                  display_element.querySelector("#jspsych-html-slider-response-next").disabled = true;
+              else {
+                  display_element.querySelector("#jspsych-html-slider-response-next").disabled = false;
               }
           });
 

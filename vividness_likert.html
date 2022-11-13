@@ -4,7 +4,7 @@
     <script src="./src/jspsych.js"></script>
     <script src="./src/plugin-html-keyboard-response.js"></script>
     <script src="./src/plugin-html-button-response.js"></script>
-    <script src="./src/plugin-html-slider-response.js"></script>
+    <script src="./src/plugin-survey-likert.js"></script>
     <script src="./src/plugin-instructions.js"></script>
     <script src="./src/stimuli.js"></script>
     <link rel="stylesheet" href="./src/jspsych.css">
@@ -18,10 +18,10 @@
       img {
         width: 600px;
       }
-      #jspsych-html-slider-response-next {
+      #jspsych-survey-likert-next {
         float: left;
       }
-      #button-idk {
+      #jspsych-survey-likert-idk {
         float: right;
       }
     </style>
@@ -90,14 +90,20 @@
     };
 
     const rating = {
-      type: jsPsychHtmlSliderResponse,
-      stimulus: "",
-      labels: ['0', '1', '2', '3', '4'],
-      slider_width: 500,
-      require_movement: true,
-      prompt: '<p>Please rate how vivid your mental image was.</p>',
+      type: jsPsychSurveyLikert,
+      questions: [
+        {
+          prompt: "<p>Please rate how vivid your mental image was.</p>", 
+          labels: [
+            "0", 
+            "1", 
+            "2", 
+            "3", 
+            "4"
+          ]
+        }
+      ],
       on_finish: () => ++trialCount,
-      
       // save all relevant trial data
       data: { screen: "trial", 
         word: jsPsych.timelineVariable('word'), 
@@ -105,10 +111,26 @@
       }
     };
 
+    // const rating = {
+    //   type: jsPsychHtmlSliderResponse,
+    //   stimulus: "",
+    //   labels: ['0', '1', '2', '3', '4'],
+    //   slider_width: 500,
+    //   require_movement: true,
+    //   prompt: '<p>Please rate how vivid your mental image was.</p>',
+    //   on_finish: () => ++trialCount,
+      
+    //   // save all relevant trial data
+    //   data: { screen: "trial", 
+    //     word: jsPsych.timelineVariable('word'), 
+    //     category: jsPsych.timelineVariable('category')
+    //   }
+    // };
+
     const breakTrial = {
       type: jsPsychHtmlButtonResponse,
       stimulus:  "<p style='font-size: 25px'>Time to take a break!</p>" + 
-              "<p style='font-size: 25px'>Take a short break. Then, continue by pressing the button</p>",
+              "<p style='font-size: 25px'>Take a short break. Then, Continue by pressing the button</p>",
       choices: ["Continue"],
       data: { screen: "break" }
     };
